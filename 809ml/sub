@@ -1,5 +1,5 @@
 if [ $(command -v x-ui | grep -c "x-ui") -lt 1 ]
-then echo 未安装x-ui，请先安装x-ui，并替换好809专用xray内核，再新建ws8080节点，接着重新运行此脚本
+then echo 未安装x-ui，请先安装x-ui，并替换好809专用xray内核，再新建ws443节点，接着重新运行此脚本
 else if [ $(command -v wget | grep -c "wget") -lt 1 -o $(command -v nginx | grep -c "nginx") -lt 1 ]
 then yum update || apt update
 yes | yum upgrade || yes | apt upgrade
@@ -10,8 +10,8 @@ sudo systemctl start nginx.service
 sudo systemctl enable nginx.service
 fi
 spip=$(curl -s ifconfig.me)
-spport="8080"
-s=$(echo $(($(cat /usr/local/x-ui/bin/config.json | grep -o "port.*" | grep -n "8080" | cut -c 1)-1)))
+spport="443"
+s=$(echo $(($(cat /usr/local/x-ui/bin/config.json | grep -o "port.*" | grep -n "443" | cut -c 1)-1)))
 id=$(cat /usr/local/x-ui/bin/config.json | grep -o '"id".*' | sed -n "$s"p | cut -d '"' -f4)
 fakeid=$(echo $RANDOM | md5sum | cut -c 1-22)
 md5="3d99ff138e1f41e931e58617e7d128e2"
@@ -26,7 +26,7 @@ config=$(echo -n "{\"add\":\"$host\",\"aid\":\"0\",\"host\":\"$host\",\"id\":\"$
 echo -n "vmess://$config" | base64 -w 0 > /usr/share/nginx/html/809
 [ $(ps -A | grep "nginx" | wc -l) -lt 1 ] && nginx
 [ ! -d ~/lt809ml ] && mkdir ~/lt809ml
-[ ! -a ~/lt809ml/sub ] && wget -O ~/lt809ml/sub https://github.com/CLvax/shell/809ml/sub
+[ ! -a ~/lt809ml/sub ] && wget -O ~/lt809ml/sub https://gitee.com/shoujiyanxishe/shjb/raw/main/lt809ml/sub
 chmod +x ~/lt809ml/sub
 if [ $(crontab -l | grep "lt809ml/sub" | wc -l) -lt 1 ]
 then crontab -l > crontablist
